@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Misi Makmal Elektrokimia</title>
+<style>
+:root{--bg:#081426;--panel:#10243e;--cyan:#54e5ed;--gold:#ffd166;--white:#eef7ff;--muted:#a9c0d8;--green:#64e6a6;--red:#ff7885}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 10%,#193b62 0,#081426 45%,#050c18 100%);font-family:Arial,sans-serif;color:var(--white);min-height:100vh}
+main{max-width:980px;margin:auto;padding:24px 16px 48px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.logo{font-size:13px;letter-spacing:2px;color:var(--cyan);font-weight:bold}.stats{display:flex;gap:10px}.pill{background:#142d4b;border:1px solid #2d5476;padding:9px 13px;border-radius:30px;font-size:13px}
+.hero{margin:28px 0 22px;padding:30px;border:1px solid #285276;border-radius:24px;background:linear-gradient(135deg,#153a5b,#10213a 60%,#261e50);box-shadow:0 18px 50px #0006;position:relative;overflow:hidden}
+.hero:after{content:"⚡";position:absolute;right:30px;top:20px;font-size:100px;opacity:.13}.eyebrow{color:var(--gold);font-weight:bold;letter-spacing:2px;font-size:12px}
+h1{font-size:clamp(30px,6vw,54px);line-height:1.02;margin:12px 0}.hero p{max-width:650px;color:#c5d8e9;line-height:1.6}
+button{border:0;border-radius:12px;padding:13px 18px;font-weight:bold;cursor:pointer;transition:.18s}button:hover{transform:translateY(-2px);filter:brightness(1.1)}button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.primary{background:linear-gradient(90deg,#35d6df,#6af0c0);color:#062033}.secondary{background:#1a3858;color:var(--white);border:1px solid #416483}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.stage{padding:20px;border-radius:18px;background:#10243e;border:1px solid #294a68}.stage .num{font-size:12px;color:var(--cyan);letter-spacing:1px}.stage h3{margin:8px 0}.stage p{color:var(--muted);font-size:14px;line-height:1.5;min-height:62px}
+.card{margin-top:18px;background:#10243e;border:1px solid #2a4c6b;border-radius:20px;padding:24px;box-shadow:0 12px 35px #0004}
+.progress{height:9px;background:#203a56;border-radius:20px;overflow:hidden;margin:12px 0 20px}.bar{height:100%;width:0;background:linear-gradient(90deg,#38d8e2,#68efb1);transition:.3s}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;gap:10px}.question{font-size:clamp(19px,3vw,25px);line-height:1.4;margin:18px 0}
+.options{display:grid;gap:10px}.opt{text-align:left;background:#183452;color:#eef7ff;border:1px solid #345b7b;padding:15px;border-radius:13px;font-size:15px}.opt.correct{border:2px solid var(--green);background:#123e3c}.opt.wrong{border:2px solid var(--red);background:#482637}
+.feedback{margin-top:16px;padding:14px;border-radius:12px;background:#0a1a2c;color:#d6e8f5;line-height:1.5;display:none}.feedback.show{display:block}.feedback strong{color:var(--gold)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.hidden{display:none!important}.result{text-align:center;padding:20px}.bigscore{font-size:56px;color:var(--gold);font-weight:bold;margin:10px}
+footer{text-align:center;color:#7895b1;font-size:12px;margin-top:28px}
+@media(max-width:560px){.hero{padding:23px}.card{padding:18px}.stats{width:100%;justify-content:space-between}}
+</style></head>
+<body><main>
+<div class="top"><div class="logo">KV • SCIENCE LAB / ELECTROCHEMISTRY</div><div class="stats"><div class="pill">⭐ Mata: <b id="score">0</b></div><div class="pill">🏅 Lencana: <b id="badges">0</b>/3</div></div></div>
+<section class="hero" id="home"><div class="eyebrow">CABARAN SAINS • DVM</div><h1>MISI MAKMAL<br><span style="color:var(--cyan)">ELEKTROKIMIA</span></h1><p>Sistem makmal telah dikunci! Selesaikan tiga misi untuk mengaktifkan semula makmal elektrokimia. Uji pengetahuan, pilih jawapan yang tepat dan kumpulkan mata untuk menjadi Pakar Elektrokimia.</p><button class="primary" onclick="startGame()">▶ MULAKAN MISI</button></section>
+<section id="stages" class="grid">
+<div class="stage"><div class="num">MISI 01</div><h3>⚡ Pakar Elektrolisis</h3><p>Kenali elektrolit, pergerakan ion, elektrod dan prosedur keselamatan.</p><span class="pill">5 cabaran</span></div>
+<div class="stage"><div class="num">MISI 02</div><h3>🏭 Jurutera Industri</h3><p>Selesaikan masalah aplikasi elektrokimia dalam industri dan alam sekitar.</p><span class="pill">5 cabaran</span></div>
+<div class="stage"><div class="num">MISI 03</div><h3>🔋 Master Sel Kimia</h3><p>Fahami siri elektrokimia, tindak balas redoks dan sel kimia.</p><span class="pill">5 cabaran</span></div>
+</section>
+<section id="game" class="card hidden">
+<div class="meta"><span id="stageName">MISI 01</span><span id="qcount">Soalan 1/5</span></div><div class="progress"><div class="bar" id="bar"></div></div>
+<div class="question" id="question"></div><div class="options" id="options"></div>
+<div class="feedback" id="feedback"></div>
+<div class="row"><span id="hint" style="color:var(--muted);font-size:13px">Pilih satu jawapan yang paling tepat.</span><button class="primary" id="next" disabled onclick="nextQuestion()">Seterusnya →</button></div>
+</section>
+<section id="result" class="card hidden"><div class="result"><div style="font-size:54px" id="resultIcon">🏆</div><h2 id="resultTitle">Misi selesai!</h2><div class="bigscore" id="finalScore">0</div><p id="resultText"></p><button class="primary" onclick="restart()">↻ Main semula</button> <button class="secondary" onclick="showHome()">Kembali ke menu</button></div></section>
+<footer>Permainan ulang kaji berdasarkan bahan Elektrokimia.pptx • Pilih jawapan dan baca maklum balas selepas setiap cabaran.</footer>
+</main>
+<script>
+const missions=[
+{title:"MISI 01 • PAKAR ELEKTROLISIS",qs:[
+["Antara berikut, yang manakah menerangkan elektrolit dengan tepat?",["Bahan yang mengalirkan arus elektrik dan mengalami perubahan kimia","Bahan yang tidak mengalirkan arus elektrik","Bahan yang hanya mengalirkan arus dalam keadaan pepejal","Bahan yang tidak mengandungi zarah bercas"],0,"Elektrolit mengalirkan arus elektrik dan mengalami perubahan kimia."],
+["Mengapakah sebatian ion pepejal seperti PbBr₂ tidak dapat dielektrolisis?",["Tiada elektron dalam sebatian","Ion tidak bebas bergerak dalam keadaan pepejal","Sebatian itu tidak mempunyai ikatan ion","Suhu pepejal terlalu rendah untuk mengalirkan arus"],1,"Dalam keadaan pepejal, ion terikat pada kedudukan tetap dan tidak bebas bergerak."],
+["Dalam sel elektrolitik, elektrod yang disambungkan kepada terminal positif ialah…",["Katod","Elektrolit","Anod","Bateri"],2,"Bagi sel elektrolitik, anod ialah elektrod positif manakala katod ialah elektrod negatif."],
+["Apakah nisbah isipadu gas hidrogen kepada oksigen yang terhasil daripada elektrolisis air?",["1 : 1","1 : 2","2 : 1","3 : 1"],2,"Nisbah isipadu hidrogen kepada oksigen ialah 2 : 1."],
+["Apakah langkah keselamatan penting semasa elektrolisis leburan PbBr₂?",["Menjalankan eksperimen di ruang tertutup tanpa pengudaraan","Menghidu gas yang terhasil untuk mengenal pasti gas","Menjalankan eksperimen dalam kebuk wasap","Menyentuh elektrod ketika bekalan kuasa hidup"],2,"Gas bromin yang terbebas di anod berbahaya. Eksperimen perlu dijalankan di dalam kebuk wasap."]
+]},
+{title:"MISI 02 • JURUTERA INDUSTRI",qs:[
+["Dalam pengekstrakan aluminium melalui elektrolisis, ion aluminium menerima elektron di…",["Anod","Katod","Elektrolit sahaja","Bekas karbon"],1,"Di katod: Al³⁺ + 3e⁻ → Al."],
+["Apakah tujuan utama proses penulenan kuprum secara elektrolisis?",["Menghasilkan kuprum yang lebih tulen","Menghasilkan gas hidrogen","Menyadur kuprum dengan aluminium","Mengurangkan saiz elektrod"],0,"Kuprum tidak tulen digunakan sebagai anod dan kuprum tulen terenap pada katod."],
+["Dalam proses penyaduran, objek yang hendak disadur biasanya dijadikan…",["Anod positif","Katod negatif","Elektrolit","Sumber elektrik"],1,"Objek yang hendak disadur dijadikan katod supaya ion logam menerima elektron dan terenap pada permukaannya."],
+["Apakah fungsi ion aluminium dalam proses elektro-penggumpalan air sisa seperti yang ditunjukkan dalam bahan?",["Menyahcas bateri","Bergabung dengan ion hidroksida dan bahan pencemar membentuk flok","Menghasilkan oksigen di katod","Melarutkan semua bahan pencemar"],1,"Ion Al³⁺ bergabung dengan OH⁻ dan bahan pencemar untuk membentuk flok."],
+["Dalam elektro-penggumpalan, gelembung gas hidrogen membantu…",["Mengangkat flok ringan ke permukaan","Menukarkan air kepada elektrolit pepejal","Menghasilkan logam aluminium tulen","Menghalang pembentukan flok"],0,"Gelembung hidrogen mengangkat serpihan flok ringan ke permukaan, manakala flok berat mendap."]
+]},
+{title:"MISI 03 • MASTER SEL KIMIA",qs:[
+["Dalam sel kimia Mg-Cu, logam magnesium bertindak sebagai…",["Katod dan menerima elektron","Anod dan menderma elektron","Elektrolit dan mengalirkan ion","Konduktor lengai"],1,"Magnesium teroksida: Mg → Mg²⁺ + 2e⁻. Oleh itu, magnesium ialah anod."],
+["Apakah yang berlaku kepada ion Cu²⁺ pada elektrod kuprum dalam sel Mg-Cu?",["Menerima elektron lalu diturunkan menjadi kuprum","Menderma elektron lalu menjadi Cu³⁺","Tidak mengalami perubahan","Bertukar menjadi ion magnesium"],0,"Ion Cu²⁺ menerima elektron: Cu²⁺ + 2e⁻ → Cu."],
+["Apakah hubungan antara perbezaan kedudukan dua logam dalam siri elektrokimia dengan voltan sel?",["Semakin kecil perbezaan, semakin besar voltan","Tiada hubungan","Semakin jauh perbezaan kedudukan, semakin besar voltan","Voltan sentiasa sifar"],2,"Bahan menyatakan semakin jauh beza kedudukan logam, semakin besar voltan."],
+["Apakah sumber elektrolit alternatif yang dicadangkan dalam aplikasi sel buah?",["Minyak masak dan petrol","Jus buah berasid dan air laut","Air suling sahaja","Larutan gula pekat"],1,"Jus buah yang mengandungi asid sitrik dan air laut yang mengandungi ion boleh bertindak sebagai elektrolit."],
+["Pernyataan manakah membezakan sel elektrolitik dengan sel kimia (volta)?",["Kedua-duanya memerlukan bateri luar","Sel elektrolitik menukarkan tenaga elektrik kepada kimia; sel kimia menukarkan tenaga kimia kepada elektrik","Anod kedua-duanya sentiasa negatif","Katod kedua-duanya sentiasa positif"],1,"Sel elektrolitik memerlukan sumber elektrik luar (anod +, katod −). Sel kimia menjana elektrik (anod −, katod +)."]
+]}
+];
+let stage=0,index=0,score=0,badges=0,answered=false;
+const $=id=>document.getElementById(id);
+function startGame(){stage=0;index=0;score=0;badges=0;updateStats();$("home").classList.add("hidden");$("stages").classList.add("hidden");$("result").classList.add("hidden");$("game").classList.remove("hidden");render()}
+function updateStats(){$("score").textContent=score;$("badges").textContent=badges}
+function render(){answered=false;let q=missions[stage].qs[index];$("stageName").textContent=missions[stage].title;$("qcount").textContent=`Soalan ${index+1}/5`;$("bar").style.width=((index)/5*100)+"%";$("question").textContent=q[0];$("options").innerHTML="";$("feedback").className="feedback";$("feedback").innerHTML="";$("next").disabled=true;$("next").textContent=index===4?(stage===2?"Lihat keputusan":"Buka misi seterusnya"):"Seterusnya →";
+q[1].forEach((opt,i)=>{let b=document.createElement("button");b.className="opt";b.textContent=String.fromCharCode(65+i)+". "+opt;b.onclick=()=>choose(i);$("options").appendChild(b)})}
+function choose(i){if(answered)return;answered=true;let q=missions[stage].qs[index],buttons=[...$("options").children],correct=i===q[2];buttons.forEach((b,j)=>{b.disabled=true;if(j===q[2])b.classList.add("correct");if(j===i&&!correct)b.classList.add("wrong")});if(correct){score+=10;$("feedback").innerHTML="<strong>✓ Tepat! +10 mata</strong><br>"+q[3]}else{$("feedback").innerHTML="<strong>✕ Belum tepat.</strong><br>Jawapan: "+String.fromCharCode(65+q[2])+". "+q[1][q[2]]+"<br>"+q[3]}$("feedback").classList.add("show");$("next").disabled=false;updateStats()}
+function nextQuestion(){if(!answered)return;if(index<4){index++;render();return}badges++;updateStats();if(stage<2){stage++;index=0;$("feedback").className="feedback";render()}else finish()}
+function finish(){ $("game").classList.add("hidden");$("result").classList.remove("hidden");$("finalScore").textContent=score+"/150";let pct=score/150;$("resultIcon").textContent=pct>=.8?"🏆":pct>=.5?"🥈":"🧪";$("resultTitle").textContent=pct>=.8?"Tahniah, Pakar Elektrokimia!":pct>=.5?"Misi berjaya diselesaikan!":"Teruskan latihan, Saintis!";$("resultText").textContent=pct>=.8?"Prestasi cemerlang! Anda menguasai konsep utama elektrokimia.":pct>=.5?"Anda telah menamatkan semua misi. Semak semula maklum balas bagi soalan yang kurang tepat.":"Ulang kaji semula nota elektrokimia dan cuba lagi untuk meningkatkan skor."}
+function restart(){startGame()}
+function showHome(){$("result").classList.add("hidden");$("game").classList.add("hidden");$("home").classList.remove("hidden");$("stages").classList.remove("hidden")}
+</script></body></html>
